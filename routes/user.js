@@ -1,5 +1,6 @@
 import express from "express";
 import User from '../models/User.js';
+import { validateUser } from "../middleware/auth.js";
 
 const router = express.Router();
 
@@ -41,19 +42,6 @@ router.get('/:id', async (req, res) => {
     }
 })
 
-// Middleware kiểm tra xem yêu cầu có chứa thông tin người dùng hợp lệ hay không
-const validateUser = (req, res, next) => {
-    const { userName, email } = req.body;
-    
-    if (!userName || !email) {
-        return res.status(400).json({
-            success: false,
-            message: 'Username or email are required'
-        });
-    }
-    // Nếu thông tin người dùng hợp lệ, tiếp tục xử lý yêu cầu
-    next();
-};
 // ADD USER
 // Sử dụng middleware validateUser cho route '/create' (thêm người dùng)
 router.post('/create', validateUser, async (req, res) => {
@@ -87,6 +75,7 @@ router.post('/create', validateUser, async (req, res) => {
         });
     }
 });
+
 // EDIT USER
 router.put('/edit/:id', async (req, res) => {
     const id = req.params.id;
@@ -122,7 +111,7 @@ router.put('/edit/:id', async (req, res) => {
             message: 'Internal server error'
         });
     }
-})
+});
 
 // DELETE USER
 router.delete('/delete/:id', async (req, res) => {
@@ -141,8 +130,6 @@ router.delete('/delete/:id', async (req, res) => {
             message: 'Internal server error'
         });
     }
-
-    
 });
 
 export default router

@@ -32,7 +32,7 @@ const userSchema = new mongoose.Schema({
         type: String
     }
 })
-//sẽ cho 1 cái id tự tạo
+
 const User = mongoose.model('User', userSchema); 
 
 export default User
